@@ -63,7 +63,7 @@ jobs:
 
       - name: 安装 NativeScript CLI
         run: |
-          npm install -g @nativescript
+          npm install -g nativescript
           ns --version
 
       - name: 安装项目依赖

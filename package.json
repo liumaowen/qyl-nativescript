@@ -1,0 +1,55 @@
+{
+  "name": "qyl-nativescript",
+  "version": "4.0.0",
+  "description": "Vue 3 + NativeScript版本的现代移动应用",
+  "main": "src/main.ts",
+  "scripts": {
+    "android": "ns run android",
+    "ios": "ns run ios",
+    "build:android": "ns build android",
+    "build:ios": "ns build ios",
+    "clean": "ns clean",
+    "lint": "eslint src --ext .ts,.vue",
+    "lint:fix": "eslint src --ext .ts,.vue --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "nativescript",
+    "vue",
+    "mobile",
+    "application"
+  ],
+  "author": "Maowen Liu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liumaowen/qyl.git"
+  },
+  "dependencies": {
+    "@nativescript-community/ui-pager": "^14.1.34",
+    "@nativescript/android": "8.6.0",
+    "@nativescript/core": "~8.6.0",
+    "@nativescript/ios": "8.6.0",
+    "@nativescript/localize": "^5.0.4",
+    "@nativescript/theme": "^3.0.2",
+    "@nstudio/nativescript-exoplayer": "^6.2.0",
+    "@vue/runtime-core": "^3.3.0",
+    "axios": "^1.9.0",
+    "crypto-js": "^4.2.0",
+    "mitt": "^3.0.1",
+    "nativescript-vue": "~3.0.0",
+    "vue": "^3.3.0",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@nativescript/webpack": "~5.0.0",
+    "@types/crypto-js": "^4.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "@vue/compiler-sfc": "^3.3.0",
+    "eslint": "^8.0.0",
+    "nativescript": "~8.9.0",
+    "typescript": "~5.0.0",
+    "vue-loader": "^17.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(python:*)",
+      "Bash(npm install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

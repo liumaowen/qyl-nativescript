@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">#8A2BE2</item>  <!-- 主色调：紫色 -->
+    <item name="colorPrimaryDark">#6A1B9A</item> <!-- 状态栏颜色：深紫色 -->
+    <item name="colorAccent">#FFA500</item> <!-- 强调色：橙色 -->
+  </style>
+
+  <!-- 启动画面主题 -->
+  <style name="LaunchScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/splash</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="colorPrimary">#8A2BE2</item>
+    <item name="colorPrimaryDark">#6A1B9A</item>
+  </style>
+
+  <!-- NativeScript 启动主题 -->
+  <style name="AppTheme.NoActionBarLaunch" parent="LaunchScreenTheme">
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowNoTitle">true</item>
+  </style>
+</resources>

@@ -1,0 +1,24 @@
+{
+  "page": {
+    "episode": "第{{number}}集"
+  },
+  "video": {
+    "firstEpisode": "第一集",
+    "watchFullDrama": "观看全{{count}}集",
+    "duration": "时长"
+  },
+  "navigation": {
+    "home": "首页",
+    "videos": "视频",
+    "more": "更多",
+    "shortDramas": "短剧",
+    "my": "我的"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "confirm": "确认",
+    "cancel": "取消"
+  }
+}

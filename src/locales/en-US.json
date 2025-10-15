@@ -1,0 +1,24 @@
+{
+  "page": {
+    "episode": "Episode {{number}}"
+  },
+  "video": {
+    "firstEpisode": "First Episode",
+    "watchFullDrama": "Watch All {{count}} Episodes",
+    "duration": "Duration"
+  },
+  "navigation": {
+    "home": "Home",
+    "videos": "Videos",
+    "more": "More",
+    "shortDramas": "Short Dramas",
+    "my": "My"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  }
+}

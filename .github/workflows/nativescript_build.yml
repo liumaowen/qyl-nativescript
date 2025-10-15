@@ -1,0 +1,278 @@
+name: Build NativeScript Android APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      buildType:
+        description: 'Build Type (debug or release)'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 设置 JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 设置 Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          build-tools: 34.0.0
+
+      - name: 缓存 Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.android
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: 缓存 npm 依赖
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 安装 NativeScript CLI
+        run: |
+          npm install -g @nativescript
+          ns --version
+
+      - name: 安装项目依赖
+        working-directory: qyl-nativescript
+        run: npm install
+
+      - name: 验证 NativeScript 环境
+        working-directory: qyl-nativescript
+        run: |
+          ns doctor android
+          ns platform add android
+
+      - name: 创建构建脚本
+        working-directory: qyl-nativescript
+        run: |
+          cat > build.sh << 'EOF'
+          #!/bin/bash
+          set -e
+
+          echo "开始构建 NativeScript 应用..."
+
+          if [ "$1" = "release" ]; then
+            echo "构建 Release 版本"
+            ns build android --release --key-store-path $SIGNING_KEY_STORE_PATH \
+              --key-store-password $SIGNING_STORE_PASSWORD \
+              --key-store-alias $SIGNING_KEY_ALIAS \
+              --key-store-alias-password $SIGNING_KEY_PASSWORD \
+              --copy-to ./app-release.apk
+          else
+            echo "构建 Debug 版本"
+            ns build android --copy-to ./app-debug.apk
+          fi
+
+          echo "构建完成"
+          ls -la *.apk *.aab 2>/dev/null || echo "未找到构建文件"
+          EOF
+
+          chmod +x build.sh
+
+      # 仅在 release 构建时还原 keystore
+      - name: 还原 keystore 文件
+        if: ${{ github.event.inputs.buildType == 'release' }}
+        working-directory: qyl-nativescript
+        env:
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH || './release.keystore' }}
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > $SIGNING_KEY_STORE_PATH
+
+      - name: 构建 NativeScript APK
+        id: build
+        working-directory: qyl-nativescript
+        env:
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH || './release.keystore' }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+        run: |
+          # 设置环境变量
+          export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+
+          # 运行构建脚本
+          ./build.sh ${{ github.event.inputs.buildType || 'debug' }}
+        continue-on-error: false
+
+      - name: 获取版本号并重命名 APK
+        id: rename_apk
+        working-directory: qyl-nativescript
+        run: |
+          VERSION=$(cat package.json | grep -E '"version":' | cut -d '"' -f 4)
+          DATE=$(date +"%Y%m%d")
+          BUILD_TYPE=${{ github.event.inputs.buildType == 'release' && 'release' || 'debug' }}
+
+          if [ "$BUILD_TYPE" = "release" ]; then
+            ORIGINAL_APK_NAME="app-release.apk"
+          else
+            ORIGINAL_APK_NAME="app-debug.apk"
+          fi
+
+          NEW_APK_NAME="qyl-nativescript-${VERSION}-${BUILD_TYPE}.apk"
+
+          if [ -f "$ORIGINAL_APK_NAME" ]; then
+            echo "正在重命名文件: $ORIGINAL_APK_NAME -> $NEW_APK_NAME"
+            mv "$ORIGINAL_APK_NAME" "$NEW_APK_NAME"
+            echo "NEW_APK_NAME=$NEW_APK_NAME" >> $GITHUB_ENV
+            echo "new_apk_name=$NEW_APK_NAME" >> $GITHUB_OUTPUT
+          fi
+
+          echo "package_version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: 查看构建输出
+        working-directory: qyl-nativescript
+        run: |
+          echo "构建产物:"
+          ls -la *.apk 2>/dev/null || echo "未找到构建文件"
+
+          echo "平台目录结构:"
+          find platforms/android -name "*.apk" -o -name "*.aab" 2>/dev/null || echo "平台目录未找到构建文件"
+
+      # 上传 APK 作为 GitHub Actions 工件
+      - name: 上传 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.buildType == 'release' && 'qyl-nativescript-release' || 'qyl-nativescript-debug' }}
+          path: |
+            qyl-nativescript/*.apk
+          retention-days: 30
+
+      - name: 上传 APK 到服务器（SFTP）
+        if: ${{ github.event.inputs.buildType == 'release' && env.NEW_APK_NAME }}
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          key: ${{ secrets.SFTP_KEY }}
+          port: ${{ secrets.SFTP_PORT }}
+          source: qyl-nativescript/${{ env.NEW_APK_NAME }}
+          target: ${{ secrets.SFTP_TARGET_DIR }}
+          strip_components: 1
+
+      - name: 调用接口更新版本信息
+        if: github.event.inputs.buildType == 'release' && env.NEW_APK_NAME
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+            "versionName": "${{ steps.rename_apk.outputs.package_version }}",
+            "downloadUrl": "https://www.qylapi.top/apks/${{ steps.rename_apk.outputs.new_apk_name }}",
+            "platform": "android",
+            "buildType": "nativescript"
+          }' \
+          '${{ secrets.API_URL }}/api/versions'
+
+      # 邮件通知
+      - name: 发送构建成功通知
+        if: ${{ steps.build.conclusion == 'success' }}
+        uses: dawidd6/action-send-mail@v6
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.QQ_EMAIL }}
+          password: ${{ secrets.QQ_EMAIL_PASSWORD }}
+          subject: ✅ NativeScript 构建成功 - ${{ github.repository }}
+          html_body: |
+            <style>h2{color: green;}</style>
+            <h2>✅ Vue 3 + NativeScript APK构建成功</h2>
+            <p><strong>仓库:</strong> ${{ github.repository }}</p>
+            <p><strong>分支:</strong> ${{ github.ref }}</p>
+            <p><strong>构建类型:</strong> ${{ github.event.inputs.buildType || 'debug' }}</p>
+            <p><strong>版本号:</strong> ${{ steps.rename_apk.outputs.package_version }}</p>
+            <p><strong>提交:</strong> <a href="https://github.com/${{ github.repository }}/commit/${{ github.sha }}">${{ github.sha }}</a></p>
+            <p><strong>工作流详情:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">点击查看</a></p>
+
+            <h3>技术栈</h3>
+            <ul>
+              <li>Vue 3 + Composition API</li>
+              <li>NativeScript 8.6+</li>
+              <li>TypeScript</li>
+              <li>原生Android性能</li>
+            </ul>
+
+            <p>您可以在GitHub Actions的"Artifacts"部分下载APK文件。</p>
+
+            <p><strong>或者通过以下链接下载：</strong></p>
+            <p><a href="https://www.qylapi.top/apks/${{ steps.rename_apk.outputs.new_apk_name }}" target="_blank">🚀 点击下载最新版本 APK</a></p>
+
+            <p>触发时间: ${{ github.event.head_commit.timestamp || github.run_started_at }}</p>
+            <hr>
+            <p style="font-size:12px;color:#999">此邮件由GitHub Actions自动发送，请勿回复。</p>
+          to: ${{ secrets.QQ_EMAIL }}
+          from: ${{ secrets.QQ_EMAIL }}
+
+      - name: 发送构建失败通知
+        if: ${{ steps.build.conclusion != 'success' }}
+        uses: dawidd6/action-send-mail@v6
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.QQ_EMAIL }}
+          password: ${{ secrets.QQ_EMAIL_PASSWORD }}
+          subject: ❌ NativeScript 构建失败 - ${{ github.repository }}
+          html_body: |
+            <style>h2{color: red;}</style>
+            <h2>❌ Vue 3 + NativeScript APK构建失败</h2>
+            <p><strong>仓库:</strong> ${{ github.repository }}</p>
+            <p><strong>分支:</strong> ${{ github.ref }}</p>
+            <p><strong>构建类型:</strong> ${{ github.event.inputs.buildType || 'debug' }}</p>
+            <p><strong>提交:</strong> <a href="https://github.com/${{ github.repository }}/commit/${{ github.sha }}">${{ github.sha }}</a></p>
+            <p><strong>工作流详情:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">点击查看</a></p>
+
+            <p style="color:red">🔍 NativeScript 构建过程出现错误，请检查以下可能原因：</p>
+            <ul style="color:#666">
+              <li>NativeScript CLI 版本兼容性</li>
+              <li>Android SDK 配置问题</li>
+              <li>依赖包安装失败</li>
+              <li>TypeScript 编译错误</li>
+              <li>Vue 3 组件语法问题</li>
+              <li>原生插件配置错误</li>
+            </ul>
+
+            <p>触发时间: ${{ github.event.head_commit.timestamp || github.run_started_at }}</p>
+            <hr>
+            <p style="font-size:12px;color:#999">此邮件由GitHub Actions自动发送，请勿回复。</p>
+          to: ${{ secrets.QQ_EMAIL }}
+          from: ${{ secrets.QQ_EMAIL }}
+
+      # 清理临时文件
+      - name: 清理构建缓存
+        if: always()
+        run: |
+          rm -rf ~/.gradle/caches/build-cache-*
+          rm -rf qyl-nativescript/platforms/android/build/intermediates

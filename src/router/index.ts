@@ -1,6 +1,7 @@
-import { createRouter } from 'nativescript-vue';
+import { createRouter, createMemoryHistory } from 'vue-router';
 
 const router = createRouter({
+  history: createMemoryHistory(),
   routes: [
     {
       path: '/',

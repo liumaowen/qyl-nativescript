@@ -67,17 +67,14 @@ jobs:
           ns --version
 
       - name: 安装项目依赖
-        working-directory: qyl-nativescript
         run: npm install
 
       - name: 验证 NativeScript 环境
-        working-directory: qyl-nativescript
         run: |
           ns doctor android
           ns platform add android
 
       - name: 创建构建脚本
-        working-directory: qyl-nativescript
         run: |
           cat > build.sh << 'EOF'
           #!/bin/bash
@@ -106,7 +103,6 @@ jobs:
       # 仅在 release 构建时还原 keystore
       - name: 还原 keystore 文件
         if: ${{ github.event.inputs.buildType == 'release' }}
-        working-directory: qyl-nativescript
         env:
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH || './release.keystore' }}
         run: |
@@ -114,7 +110,6 @@ jobs:
 
       - name: 构建 NativeScript APK
         id: build
-        working-directory: qyl-nativescript
         env:
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH || './release.keystore' }}
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -132,7 +127,6 @@ jobs:
 
       - name: 获取版本号并重命名 APK
         id: rename_apk
-        working-directory: qyl-nativescript
         run: |
           VERSION=$(cat package.json | grep -E '"version":' | cut -d '"' -f 4)
           DATE=$(date +"%Y%m%d")
@@ -156,7 +150,6 @@ jobs:
           echo "package_version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: 查看构建输出
-        working-directory: qyl-nativescript
         run: |
           echo "构建产物:"
           ls -la *.apk 2>/dev/null || echo "未找到构建文件"
@@ -170,7 +163,7 @@ jobs:
         with:
           name: ${{ github.event.inputs.buildType == 'release' && 'qyl-nativescript-release' || 'qyl-nativescript-debug' }}
           path: |
-            qyl-nativescript/*.apk
+            *.apk
           retention-days: 30
 
       - name: 上传 APK 到服务器（SFTP）
@@ -181,7 +174,7 @@ jobs:
           username: ${{ secrets.SFTP_USER }}
           key: ${{ secrets.SFTP_KEY }}
           port: ${{ secrets.SFTP_PORT }}
-          source: qyl-nativescript/${{ env.NEW_APK_NAME }}
+          source: ${{ env.NEW_APK_NAME }}
           target: ${{ secrets.SFTP_TARGET_DIR }}
           strip_components: 1
 
@@ -275,4 +268,4 @@ jobs:
         if: always()
         run: |
           rm -rf ~/.gradle/caches/build-cache-*
-          rm -rf qyl-nativescript/platforms/android/build/intermediates
+          rm -rf platforms/android/build/intermediates

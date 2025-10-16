@@ -26,7 +26,7 @@ module.exports = (env) => {
       "http": false,
       "https": false,
       "zlib": false,
-      "querystring": false
+      "querystring": false,
       "url":require.resolve('url/')
     };
 

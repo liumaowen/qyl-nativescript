@@ -29,6 +29,8 @@
   },
   "include": [
     "src/**/*",
+    "src/**/*.vue",
+    "src/**/*.d.ts",
     "nativescript.config.ts"
   ],
   "exclude": [

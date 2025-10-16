@@ -76,7 +76,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, defineEmits, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+// defineProps and defineEmits are compiler macros, no import needed
 import { useRouter } from 'vue-router';
 import { VideoItem } from '@/types/video';
 import { UserAnalytics } from '@/services/analytics.service';

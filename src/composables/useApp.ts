@@ -78,7 +78,7 @@ export function useAppSettings() {
 ) => {
     settings[key] = value;
     // 这里可以保存到本地存储
-    console.log(`设置已更新: ${key} = ${value}`);
+    console.log(`设置已更新: ${String(key)} = ${String(value)}`);
   };
 
   const resetSettings = () => {
@@ -147,7 +147,7 @@ export function usePermissions() {
       permissions[permission] = true;
       return true;
     } catch (error) {
-      console.error(`权限请求失败: ${permission}`, error);
+      console.error(`权限请求失败: ${String(permission)}`, error);
       return false;
     }
   };

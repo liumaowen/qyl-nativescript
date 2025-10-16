@@ -8,7 +8,8 @@
       "Bash(npm run lint)",
       "Bash(npm run lint:*)",
       "Bash(npx webpack:*)",
-      "Bash(npm run build:android:*)"
+      "Bash(npm run build:android:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

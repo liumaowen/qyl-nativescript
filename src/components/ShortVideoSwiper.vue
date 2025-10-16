@@ -27,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineProps, defineEmits, watch } from 'vue';
+import { ref, reactive, watch } from 'vue';
+// defineProps and defineEmits are compiler macros, no import needed
 import { VideoItem } from '@/types/video';
 import { UserAnalytics } from '@/services/analytics.service';
 import ShortVideoItem from './ShortVideoItem.vue';

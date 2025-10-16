@@ -127,7 +127,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, defineEmits, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+// defineProps and defineEmits are compiler macros, no import needed
 import {
   GestureEventData,
   PanGestureEventData,

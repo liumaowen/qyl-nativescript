@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+// defineProps and defineEmits are compiler macros, no import needed
 import { UserAnalytics } from '@/services/analytics.service';
 
 // Props

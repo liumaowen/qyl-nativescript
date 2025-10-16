@@ -9,6 +9,10 @@ module.exports = (env) => {
       .set('@', webpack.Utils.project.getProjectFilePath('src'))
       .set('vue', 'nativescript-vue');
 
+    // 确保解析扩展名包含.vue文件
+    config.resolve.extensions
+      .merge(['.vue', '.ts', '.js', '.json']);
+
     // 配置Node.js polyfills - 彻底禁用以消除警告
     config.resolve.fallback = {
       "crypto": false,

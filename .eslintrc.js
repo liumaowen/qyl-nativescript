@@ -6,7 +6,6 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
     'plugin:vue/vue3-recommended'
   ],
   parser: 'vue-eslint-parser',
@@ -19,6 +18,10 @@ module.exports = {
     'vue',
     '@typescript-eslint'
   ],
+  globals: {
+    android: 'readonly',
+    global: 'readonly'
+  },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

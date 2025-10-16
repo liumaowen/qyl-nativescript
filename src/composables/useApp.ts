@@ -1,4 +1,4 @@
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive } from 'vue';
 import { LocalizationService } from '@/services/localization.service';
 
 // 国际化组合函数
@@ -72,7 +72,10 @@ export function useAppSettings() {
     { value: '480p', label: '480P' }
   ];
 
-  const updateSetting = (key: keyof typeof settings, value: any) => {
+  const updateSetting = <K extends keyof typeof settings>(
+  key: K,
+  value: typeof settings[K]
+) => {
     settings[key] = value;
     // 这里可以保存到本地存储
     console.log(`设置已更新: ${key} = ${value}`);

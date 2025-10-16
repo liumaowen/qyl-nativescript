@@ -1,25 +1,30 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <StackLayout class="page-container">
-
       <!-- Header -->
       <StackLayout class="header-container">
-        <Button text="←" class="back-button" @tap="goBack" />
-        <Label :text="t('page.episode', { number: titleCount })" class="page-title" />
+        <Button
+          text="←"
+          class="back-button"
+          @tap="goBack"
+        />
+        <Label
+          :text="t('page.episode', { number: titleCount })"
+          class="page-title"
+        />
       </StackLayout>
 
       <!-- 通用视频滑动器 -->
       <UniversalVideoSwiper
-        :videoList="dramaDetails"
-        :containerWidth="containerWidth"
-        :containerHeight="containerHeight"
+        :video-list="dramaDetails"
+        :container-width="containerWidth"
+        :container-height="containerHeight"
         orientation="horizontal"
-        :autoPlay="true"
-        analyticsPrefix="drama_detail"
-        @update:currentIndex="onCurrentIndexUpdate"
-        @pageChange="onPageChange"
+        :auto-play="true"
+        analytics-prefix="drama_detail"
+        @update:current-index="onCurrentIndexUpdate"
+        @page-change="onPageChange"
       />
-
     </StackLayout>
   </Page>
 </template>

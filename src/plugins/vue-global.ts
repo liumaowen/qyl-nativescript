@@ -1,8 +1,4 @@
-import { createCompositionAPI } from 'nativescript-vue';
 import { LocalizationService } from '@/services/localization.service';
-
-// 创建组合API支持
-createCompositionAPI();
 
 // 全局Vue插件
 export const globalPlugin = {
@@ -26,7 +22,8 @@ export const globalPlugin = {
     app.mixin({
       methods: {
         $navigateTo(component: any, options: any = {}) {
-          this.$navigateToModal(component, options);
+          // 导航到页面的逻辑
+          console.log('导航到页面:', component);
         },
 
         $showLoading() {

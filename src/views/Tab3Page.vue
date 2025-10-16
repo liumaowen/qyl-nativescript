@@ -1,31 +1,59 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <ScrollView>
       <StackLayout class="page-container">
-
         <!-- Header -->
         <StackLayout class="header-section">
-          <Label :text="$t('navigation.more')" class="section-title" />
+          <Label
+            :text="$t('navigation.more')"
+            class="section-title"
+          />
         </StackLayout>
 
         <!-- Settings List -->
         <StackLayout class="settings-section">
-          <StackLayout class="setting-item" @tap="openLanguageSettings">
-            <Label text="🌍 语言设置" class="setting-label" />
-            <Label text=">" class="setting-arrow" />
+          <StackLayout
+            class="setting-item"
+            @tap="openLanguageSettings"
+          >
+            <Label
+              text="🌍 语言设置"
+              class="setting-label"
+            />
+            <Label
+              text=">"
+              class="setting-arrow"
+            />
           </StackLayout>
 
-          <StackLayout class="setting-item" @tap="checkUpdate">
-            <Label text="🔄 检查更新" class="setting-label" />
-            <Label text=">" class="setting-arrow" />
+          <StackLayout
+            class="setting-item"
+            @tap="checkUpdate"
+          >
+            <Label
+              text="🔄 检查更新"
+              class="setting-label"
+            />
+            <Label
+              text=">"
+              class="setting-arrow"
+            />
           </StackLayout>
 
-          <StackLayout class="setting-item" @tap="openAbout">
-            <Label text="ℹ️ 关于应用" class="setting-label" />
-            <Label text=">" class="setting-arrow" />
+          <StackLayout
+            class="setting-item"
+            @tap="openAbout"
+          >
+            <Label
+              text="ℹ️ 关于应用"
+              class="setting-label"
+            />
+            <Label
+              text=">"
+              class="setting-arrow"
+            />
           </StackLayout>
         </StackLayout>
-
       </StackLayout>
     </ScrollView>
   </Page>

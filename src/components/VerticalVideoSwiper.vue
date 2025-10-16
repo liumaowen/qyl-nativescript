@@ -1,6 +1,8 @@
 <template>
-  <GridLayout class="vertical-swiper-container" :height="containerHeight">
-
+  <GridLayout
+    class="vertical-swiper-container"
+    :height="containerHeight"
+  >
     <!-- 当前视频 -->
     <StackLayout
       row="0"
@@ -11,13 +13,13 @@
         v-if="currentVideo"
         :video="currentVideo"
         :index="currentIndex"
-        :containerWidth="containerWidth"
-        :containerHeight="containerHeight"
+        :container-width="containerWidth"
+        :container-height="containerHeight"
         :progress="progress[currentIndex] || 0"
-        :isPlaying="isCurrentVideoPlaying"
+        :is-playing="isCurrentVideoPlaying"
         @play="onVideoPlay"
         @pause="onVideoPause"
-        @progressChange="onProgressChange"
+        @progress-change="onProgressChange"
       />
     </StackLayout>
 
@@ -26,19 +28,19 @@
       row="0"
       class="video-page next-video"
       :visibility="nextVideo ? 'visible' : 'collapsed'"
-      :translateY="containerHeight"
+      :translate-y="containerHeight"
     >
       <ShortVideoItem
         v-if="nextVideo"
         :video="nextVideo"
         :index="currentIndex + 1"
-        :containerWidth="containerWidth"
-        :containerHeight="containerHeight"
+        :container-width="containerWidth"
+        :container-height="containerHeight"
         :progress="progress[currentIndex + 1] || 0"
-        :isPlaying="false"
+        :is-playing="false"
         @play="onVideoPlay"
         @pause="onVideoPause"
-        @progressChange="onProgressChange"
+        @progress-change="onProgressChange"
       />
     </StackLayout>
 
@@ -47,19 +49,19 @@
       row="0"
       class="video-page prev-video"
       :visibility="prevVideo ? 'visible' : 'collapsed'"
-      :translateY="-containerHeight"
+      :translate-y="-containerHeight"
     >
       <ShortVideoItem
         v-if="prevVideo"
         :video="prevVideo"
         :index="currentIndex - 1"
-        :containerWidth="containerWidth"
-        :containerHeight="containerHeight"
+        :container-width="containerWidth"
+        :container-height="containerHeight"
         :progress="progress[currentIndex - 1] || 0"
-        :isPlaying="false"
+        :is-playing="false"
         @play="onVideoPlay"
         @pause="onVideoPause"
-        @progressChange="onProgressChange"
+        @progress-change="onProgressChange"
       />
     </StackLayout>
 
@@ -73,28 +75,54 @@
 
     <!-- 侧边栏 (点赞、分享等) -->
     <StackLayout
+      v-if="currentVideo"
       row="0"
       class="side-actions"
-      horizontalAlignment="right"
-      verticalAlignment="bottom"
-      v-if="currentVideo"
+      horizontal-alignment="right"
+      vertical-alignment="bottom"
     >
-      <StackLayout class="action-item" @tap="onLike">
-        <Label :text="isLiked ? '❤️' : '🤍'" class="action-icon" />
-        <Label :text="formatCount(currentVideo.likeCount || 0)" class="action-count" />
+      <StackLayout
+        class="action-item"
+        @tap="onLike"
+      >
+        <Label
+          :text="isLiked ? '❤️' : '🤍'"
+          class="action-icon"
+        />
+        <Label
+          :text="formatCount(currentVideo.likeCount || 0)"
+          class="action-count"
+        />
       </StackLayout>
 
-      <StackLayout class="action-item" @tap="onComment">
-        <Label text="💬" class="action-icon" />
-        <Label :text="formatCount(currentVideo.commentCount || 0)" class="action-count" />
+      <StackLayout
+        class="action-item"
+        @tap="onComment"
+      >
+        <Label
+          text="💬"
+          class="action-icon"
+        />
+        <Label
+          :text="formatCount(currentVideo.commentCount || 0)"
+          class="action-count"
+        />
       </StackLayout>
 
-      <StackLayout class="action-item" @tap="onShare">
-        <Label text="📤" class="action-icon" />
-        <Label text="分享" class="action-text" />
+      <StackLayout
+        class="action-item"
+        @tap="onShare"
+      >
+        <Label
+          text="📤"
+          class="action-icon"
+        />
+        <Label
+          text="分享"
+          class="action-text"
+        />
       </StackLayout>
     </StackLayout>
-
   </GridLayout>
 </template>
 

@@ -1,5 +1,4 @@
-import { Screen } from '@nativescript/core';
-import { VideoItem } from '@/types/video';
+import { Application, isAndroid } from '@nativescript/core';
 
 interface VideoPlayerState {
   player: any;
@@ -18,17 +17,16 @@ export class VideoPlayerService {
 
   static async enterFullscreen(): Promise<void> {
     try {
-      // 锁定横屏
-      await Screen.orientation.lock('landscape');
+      // 锁定横屏 - Screen没有orientation属性，需要使用不同的API
+      // await Screen.orientation.lock('landscape');
 
       // 隐藏状态栏
-      const application = require('@nativescript/core').Application;
-      if (application.android) {
-        const activity = application.android.foregroundActivity;
+      if (isAndroid) {
+        const activity = Application.android.foregroundActivity;
         const view = activity.getWindow().getDecorView();
-        const flags = android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                     android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                     android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        const flags = (android as any).view.View.SYSTEM_UI_FLAG_FULLSCREEN |
+                     (android as any).view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                     (android as any).view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         view.setSystemUiVisibility(flags);
       }
 
@@ -40,15 +38,14 @@ export class VideoPlayerService {
 
   static async exitFullscreen(): Promise<void> {
     try {
-      // 恢复竖屏
-      await Screen.orientation.lock('portrait');
+      // 恢复竖屏 - Screen没有orientation属性，需要使用不同的API
+      // await Screen.orientation.lock('portrait');
 
       // 显示状态栏
-      const application = require('@nativescript/core').Application;
-      if (application.android) {
-        const activity = application.android.foregroundActivity;
+      if (isAndroid) {
+        const activity = Application.android.foregroundActivity;
         const view = activity.getWindow().getDecorView();
-        view.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
+        view.setSystemUiVisibility((android as any).view.View.SYSTEM_UI_FLAG_VISIBLE);
       }
 
       console.log('退出全屏模式');

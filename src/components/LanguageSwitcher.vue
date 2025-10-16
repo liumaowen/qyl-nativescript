@@ -1,6 +1,9 @@
 <template>
   <StackLayout class="language-switcher">
-    <Label text="🌍 选择语言" class="switcher-title" />
+    <Label
+      text="🌍 选择语言"
+      class="switcher-title"
+    />
 
     <StackLayout
       v-for="language in supportedLanguages"
@@ -8,8 +11,14 @@
       class="language-option"
       @tap="() => selectLanguage(language.code)"
     >
-      <StackLayout orientation="horizontal" class="language-row">
-        <Label :text="language.name" class="language-name" />
+      <StackLayout
+        orientation="horizontal"
+        class="language-row"
+      >
+        <Label
+          :text="language.name"
+          class="language-name"
+        />
         <Label
           v-if="currentLanguage === language.code"
           text="✓"

@@ -1,17 +1,26 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <ScrollView>
       <StackLayout class="analytics-demo">
-
         <!-- Header -->
         <StackLayout class="header-section">
-          <Button text="←" class="back-button" @tap="goBack" />
-          <Label text="分析演示" class="page-title" />
+          <Button
+            text="←"
+            class="back-button"
+            @tap="goBack"
+          />
+          <Label
+            text="分析演示"
+            class="page-title"
+          />
         </StackLayout>
 
         <!-- Analytics Controls -->
         <StackLayout class="demo-section">
-          <Label text="用户分析演示" class="section-title" />
+          <Label
+            text="用户分析演示"
+            class="section-title"
+          />
 
           <Button
             text="触发事件: 按钮点击"
@@ -40,20 +49,25 @@
 
         <!-- Event Log -->
         <StackLayout class="log-section">
-          <Label text="事件日志" class="section-title" />
-          <ScrollView height="200" class="log-container">
+          <Label
+            text="事件日志"
+            class="section-title"
+          />
+          <ScrollView
+            height="200"
+            class="log-container"
+          >
             <StackLayout>
               <Label
                 v-for="(log, index) in eventLogs"
                 :key="index"
                 :text="log"
                 class="log-item"
-                textWrap="true"
+                text-wrap="true"
               />
             </StackLayout>
           </ScrollView>
         </StackLayout>
-
       </StackLayout>
     </ScrollView>
   </Page>

@@ -18,7 +18,7 @@ export class VideoMemoryManager {
     this.memoryCheckInterval = setInterval(() => {
       this.checkMemoryUsage();
       this.collectPerformanceMetrics();
-    }, 15000); // 每15秒检查一次
+    }, 15000) as any; // 每15秒检查一次
 
     console.log('📊 视频内存监控已启动');
   }

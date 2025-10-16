@@ -1,37 +1,51 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <ScrollView>
       <StackLayout class="page-container">
-
         <!-- Header -->
         <StackLayout class="header-section">
-          <Label :text="t('navigation.shortDramas')" class="section-title" />
+          <Label
+            :text="t('navigation.shortDramas')"
+            class="section-title"
+          />
         </StackLayout>
 
         <!-- 通用视频滑动器 -->
         <UniversalVideoSwiper
           v-if="videoList.length > 0"
-          :videoList="videoList"
-          :containerWidth="containerWidth"
-          :containerHeight="containerHeight"
+          :video-list="videoList"
+          :container-width="containerWidth"
+          :container-height="containerHeight"
           orientation="vertical"
-          :autoPlay="true"
-          analyticsPrefix="short_dramas"
-          @update:currentIndex="onCurrentIndexUpdate"
+          :auto-play="true"
+          analytics-prefix="short_dramas"
+          @update:current-index="onCurrentIndexUpdate"
           @update:progress="onProgressUpdate"
-          @pageChange="onPageChange"
+          @page-change="onPageChange"
           @retry="loadShortDramas"
         />
 
         <!-- Loading -->
-        <ActivityIndicator :busy="isLoading" class="loading-indicator" />
+        <ActivityIndicator
+          :busy="isLoading"
+          class="loading-indicator"
+        />
 
         <!-- Empty State -->
-        <StackLayout v-if="!isLoading && videoList.length === 0" class="empty-state">
-          <Label :text="t('common.noData', '暂无短剧')" class="empty-text" />
-          <Button :text="t('common.retry', '重试')" @tap="loadShortDramas" class="retry-button" />
+        <StackLayout
+          v-if="!isLoading && videoList.length === 0"
+          class="empty-state"
+        >
+          <Label
+            :text="t('common.noData', '暂无短剧')"
+            class="empty-text"
+          />
+          <Button
+            :text="t('common.retry', '重试')"
+            class="retry-button"
+            @tap="loadShortDramas"
+          />
         </StackLayout>
-
       </StackLayout>
     </ScrollView>
   </Page>

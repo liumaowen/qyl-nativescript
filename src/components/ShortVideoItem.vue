@@ -1,6 +1,5 @@
 <template>
   <StackLayout class="video-container">
-
     <!-- 视频播放器 -->
     <VideoPlayer
       ref="videoPlayerRef"
@@ -19,34 +18,60 @@
     <!-- 播放暂停按钮 -->
     <StackLayout
       class="center-controls"
-      @tap="togglePlay"
       :visibility="isPlaying ? 'collapsed' : 'visible'"
+      @tap="togglePlay"
     >
-      <Label text="▶️" class="play-button" />
+      <Label
+        text="▶️"
+        class="play-button"
+      />
     </StackLayout>
 
     <!-- 进度条 -->
     <StackLayout class="progress-container">
-      <Progress :value="progress" :maxValue="100" class="video-progress" />
+      <Progress
+        :value="progress"
+        :max-value="100"
+        class="video-progress"
+      />
     </StackLayout>
 
     <!-- 视频信息栏 -->
-    <StackLayout class="video-info" v-if="video.title">
-      <Label :text="video.title" class="video-title" textWrap="true" />
+    <StackLayout
+      v-if="video.title"
+      class="video-info"
+    >
+      <Label
+        :text="video.title"
+        class="video-title"
+        text-wrap="true"
+      />
 
       <StackLayout
+        v-if="showEpisodeInfo"
         orientation="horizontal"
         class="episode-info"
-        v-if="showEpisodeInfo"
       >
-        <Label :text="t('video.firstEpisode')" class="episode-text" />
-        <StackLayout orientation="horizontal" class="watch-full" @tap="goToDetail">
-          <Label :text="t('video.watchFullDrama', { count: video.info?.count })" class="watch-text" />
-          <Label text="▶️" class="arrow-icon" />
+        <Label
+          :text="t('video.firstEpisode')"
+          class="episode-text"
+        />
+        <StackLayout
+          orientation="horizontal"
+          class="watch-full"
+          @tap="goToDetail"
+        >
+          <Label
+            :text="t('video.watchFullDrama', { count: video.info?.count })"
+            class="watch-text"
+          />
+          <Label
+            text="▶️"
+            class="arrow-icon"
+          />
         </StackLayout>
       </StackLayout>
     </StackLayout>
-
   </StackLayout>
 </template>
 

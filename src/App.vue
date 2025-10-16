@@ -1,8 +1,10 @@
 <template>
   <Frame>
-    <Page actionBarHidden="true">
-      <TabView selectedIndex="1" @selectedIndexChange="onTabChange">
-
+    <Page action-bar-hidden="true">
+      <TabView
+        selected-index="1"
+        @selected-index-change="onTabChange"
+      >
         <!-- Tab 2 -->
         <TabViewItem title="首页">
           <GridLayout>
@@ -23,7 +25,6 @@
             <MyPage />
           </GridLayout>
         </TabViewItem>
-
       </TabView>
     </Page>
   </Frame>

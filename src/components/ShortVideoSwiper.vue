@@ -1,22 +1,25 @@
 <template>
-  <StackLayout class="swiper-container" :height="containerHeight">
+  <StackLayout
+    class="swiper-container"
+    :height="containerHeight"
+  >
     <ListView
       :items="videoList"
       orientation="horizontal"
-      @itemTap="onVideoTap"
       class="video-swiper"
+      @item-tap="onVideoTap"
     >
       <template #default="{ item, index }">
         <ShortVideoItem
           :video="item"
           :index="index"
-          :containerWidth="containerWidth"
-          :containerHeight="containerHeight"
+          :container-width="containerWidth"
+          :container-height="containerHeight"
           :progress="progress[index] || 0"
-          :isPlaying="currentPlayingIndex === index"
+          :is-playing="currentPlayingIndex === index"
           @play="onVideoPlay"
           @pause="onVideoPause"
-          @progressChange="onProgressChange"
+          @progress-change="onProgressChange"
         />
       </template>
     </ListView>

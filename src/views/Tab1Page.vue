@@ -1,32 +1,54 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <ScrollView>
       <StackLayout class="page-container">
-
         <!-- Header -->
         <StackLayout class="header-section">
-          <Label :text="$t('navigation.home')" class="section-title" />
+          <Label
+            :text="$t('navigation.home')"
+            class="section-title"
+          />
         </StackLayout>
 
         <!-- Welcome Section -->
         <StackLayout class="welcome-section">
-          <Label text="欢迎使用视频应用" class="welcome-title" />
-          <Label text="发现精彩视频内容" class="welcome-subtitle" />
+          <Label
+            text="欢迎使用视频应用"
+            class="welcome-title"
+          />
+          <Label
+            text="发现精彩视频内容"
+            class="welcome-subtitle"
+          />
         </StackLayout>
 
         <!-- Featured Videos -->
         <StackLayout class="featured-section">
-          <Label text="推荐视频" class="section-label" />
-          <ListView :items="featuredVideos" class="featured-list">
+          <Label
+            text="推荐视频"
+            class="section-label"
+          />
+          <ListView
+            :items="featuredVideos"
+            class="featured-list"
+          >
             <template #default="{ item }">
-              <StackLayout class="featured-item" @tap="() => openVideo(item)">
-                <Image :src="item.poster" class="featured-image" />
-                <Label :text="item.title" class="featured-title" />
+              <StackLayout
+                class="featured-item"
+                @tap="() => openVideo(item)"
+              >
+                <Image
+                  :src="item.poster"
+                  class="featured-image"
+                />
+                <Label
+                  :text="item.title"
+                  class="featured-title"
+                />
               </StackLayout>
             </template>
           </ListView>
         </StackLayout>
-
       </StackLayout>
     </ScrollView>
   </Page>

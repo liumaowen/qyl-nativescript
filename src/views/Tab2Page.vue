@@ -1,40 +1,49 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page action-bar-hidden="true">
     <ScrollView>
       <StackLayout class="tab2-container">
-
         <!-- Header Section -->
         <StackLayout class="header-section">
-          <Label :text="t('navigation.videos')" class="section-title" />
+          <Label
+            :text="t('navigation.videos')"
+            class="section-title"
+          />
         </StackLayout>
 
         <!-- 通用视频滑动器 -->
         <UniversalVideoSwiper
-          :videoList="videoList"
-          :containerWidth="containerWidth"
-          :containerHeight="containerHeight"
+          :video-list="videoList"
+          :container-width="containerWidth"
+          :container-height="containerHeight"
           orientation="vertical"
-          :autoPlay="false"
+          :auto-play="false"
           :spacing="10"
           :peaking="20"
-          analyticsPrefix="tab2_videos"
-          :isLoading="isLoading"
-          :loadingText="t('common.loading', '加载中...')"
-          :emptyText="t('common.noData', '暂无数据')"
-          :retryText="t('common.retry', '重试')"
-          @pageChange="onPageChange"
-          @videoPlay="onVideoPlay"
+          analytics-prefix="tab2_videos"
+          :is-loading="isLoading"
+          :loading-text="t('common.loading', '加载中...')"
+          :empty-text="t('common.noData', '暂无数据')"
+          :retry-text="t('common.retry', '重试')"
+          @page-change="onPageChange"
+          @video-play="onVideoPlay"
           @retry="loadVideos"
         >
           <!-- 自定义视频卡片模板 -->
           <template #video-item="{ video, index, isPlaying, progress, onPlay, onPause }">
             <StackLayout class="video-card-container">
               <!-- Video Thumbnail -->
-              <Image :src="video.poster" class="video-thumbnail" />
+              <Image
+                :src="video.poster"
+                class="video-thumbnail"
+              />
 
               <!-- Video Info Overlay -->
               <StackLayout class="video-info-overlay">
-                <Label :text="video.title" class="video-title" textWrap="true" />
+                <Label
+                  :text="video.title"
+                  class="video-title"
+                  text-wrap="true"
+                />
                 <Label
                   v-if="video.duration"
                   :text="`${t('video.duration')}: ${video.duration}分钟`"
@@ -43,7 +52,10 @@
               </StackLayout>
 
               <!-- Play Button Overlay -->
-              <StackLayout class="play-overlay" @tap="onPlay">
+              <StackLayout
+                class="play-overlay"
+                @tap="onPlay"
+              >
                 <Label
                   :text="isPlaying ? '⏸️' : '▶️'"
                   class="play-icon"
@@ -51,13 +63,19 @@
               </StackLayout>
 
               <!-- Progress Bar -->
-              <StackLayout v-if="progress > 0" class="progress-overlay">
-                <Progress :value="progress" :maxValue="100" class="video-progress" />
+              <StackLayout
+                v-if="progress > 0"
+                class="progress-overlay"
+              >
+                <Progress
+                  :value="progress"
+                  :max-value="100"
+                  class="video-progress"
+                />
               </StackLayout>
             </StackLayout>
           </template>
         </UniversalVideoSwiper>
-
       </StackLayout>
     </ScrollView>
   </Page>

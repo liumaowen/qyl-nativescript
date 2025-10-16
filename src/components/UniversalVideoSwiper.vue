@@ -3,13 +3,13 @@
     v-if="videoList.length > 0"
     :items="videoList"
     :orientation="orientation"
-    :selectedIndex="currentIndex"
-    @selectedIndexChanged="onPageChanged"
+    :selected-index="currentIndex"
     :class="containerClass"
     :height="containerHeight"
     :width="containerWidth"
     :spacing="spacing"
     :peaking="peaking"
+    @selected-index-changed="onPageChanged"
   >
     <template #default="{ item, index }">
       <StackLayout :class="pageContainerClass">
@@ -17,23 +17,23 @@
           name="video-item"
           :video="item"
           :index="index"
-          :isPlaying="currentIndex === index && isPlaying"
+          :is-playing="currentIndex === index && isPlaying"
           :progress="progress[index] || 0"
-          :onPlay="() => handleVideoPlay(index)"
-          :onPause="() => handleVideoPause(index)"
-          :onProgressChange="(prog: number) => handleProgressChange(index, prog)"
+          :on-play="() => handleVideoPlay(index)"
+          :on-pause="() => handleVideoPause(index)"
+          :on-progress-change="(prog: number) => handleProgressChange(index, prog)"
         >
           <!-- 默认视频组件 -->
           <ShortVideoItem
             :video="item"
             :index="index"
-            :containerWidth="containerWidth"
-            :containerHeight="containerHeight"
+            :container-width="containerWidth"
+            :container-height="containerHeight"
             :progress="progress[index] || 0"
-            :isPlaying="currentIndex === index && isPlaying"
+            :is-playing="currentIndex === index && isPlaying"
             @play="handleVideoPlay"
             @pause="handleVideoPause"
-            @progressChange="handleProgressChange"
+            @progress-change="handleProgressChange"
           />
         </slot>
       </StackLayout>
@@ -41,19 +41,34 @@
   </Pager>
 
   <!-- 加载状态 -->
-  <StackLayout v-else-if="isLoading" class="loading-container">
-    <ActivityIndicator :busy="true" class="loading-indicator" />
-    <Label :text="loadingText" class="loading-text" />
+  <StackLayout
+    v-else-if="isLoading"
+    class="loading-container"
+  >
+    <ActivityIndicator
+      :busy="true"
+      class="loading-indicator"
+    />
+    <Label
+      :text="loadingText"
+      class="loading-text"
+    />
   </StackLayout>
 
   <!-- 空状态 -->
-  <StackLayout v-else class="empty-container">
-    <Label :text="emptyText" class="empty-text" />
+  <StackLayout
+    v-else
+    class="empty-container"
+  >
+    <Label
+      :text="emptyText"
+      class="empty-text"
+    />
     <Button
       v-if="showRetryButton"
       :text="retryText"
-      @tap="$emit('retry')"
       class="retry-button"
+      @tap="$emit('retry')"
     />
   </StackLayout>
 </template>

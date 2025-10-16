@@ -1,5 +1,7 @@
 import { Utils, isAndroid } from '@nativescript/core';
 
+declare let android: any;
+
 export class AppUpdateService {
   static async checkForUpdates(): Promise<boolean> {
     try {
@@ -28,9 +30,9 @@ export class AppUpdateService {
 
       // 在Android上，可以使用原生方法下载并安装APK
       if (isAndroid) {
-        const intent = new (android as any).content.Intent((android as any).content.Intent.ACTION_VIEW);
-        intent.setData((android as any).net.Uri.parse(downloadUrl));
-        intent.setFlags((android as any).content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        const intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+        intent.setData(android.net.Uri.parse(downloadUrl));
+        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
 
         const context = Utils.ad.getApplicationContext();
         context.startActivity(intent);

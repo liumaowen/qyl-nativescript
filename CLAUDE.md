@@ -27,7 +27,7 @@ npm run clean
 # 运行测试（使用Jest配置）
 npm run test
 # 打包测试
-npx webpack --mode=production
+npx webpack --env platform=android --mode=production
 ```
 
 ## 架构概览

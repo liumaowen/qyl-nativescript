@@ -1,5 +1,7 @@
 import { Application, isAndroid } from '@nativescript/core';
 
+declare let android: any;
+
 interface VideoPlayerState {
   player: any;
   isLoaded: boolean;
@@ -24,9 +26,9 @@ export class VideoPlayerService {
       if (isAndroid) {
         const activity = Application.android.foregroundActivity;
         const view = activity.getWindow().getDecorView();
-        const flags = (android as any).view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                     (android as any).view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                     (android as any).view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        const flags = android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
+                     android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                     android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         view.setSystemUiVisibility(flags);
       }
 
@@ -45,7 +47,7 @@ export class VideoPlayerService {
       if (isAndroid) {
         const activity = Application.android.foregroundActivity;
         const view = activity.getWindow().getDecorView();
-        view.setSystemUiVisibility((android as any).view.View.SYSTEM_UI_FLAG_VISIBLE);
+        view.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
       }
 
       console.log('退出全屏模式');

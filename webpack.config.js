@@ -20,7 +20,7 @@ module.exports = (env) => {
       "path": false,
       "os": false,
       "stream": false,
-      "util": false,
+      "util": require.resolve('util/'),
       "buffer": false,
       "process": false,
       "http": false,

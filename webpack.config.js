@@ -12,11 +12,10 @@ module.exports = (env) => {
     // 确保解析扩展名包含.vue文件
     config.resolve.extensions
       .merge(['.vue', '.ts', '.js', '.json']);
-
+    config.resolve.fallback = require.resolve('url/');
     // 配置Node.js polyfills - 彻底禁用以消除警告
     config.resolve.fallback = {
       "crypto": false,
-      "url": false,
       "fs": false,
       "path": false,
       "os": false,
@@ -28,6 +27,7 @@ module.exports = (env) => {
       "https": false,
       "zlib": false,
       "querystring": false
+      "url":require.resolve('url/')
     };
 
     // 添加Vue文件处理

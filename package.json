@@ -33,11 +33,11 @@
     "@nativescript/localize": "^5.0.4",
     "@nativescript/theme": "^3.0.2",
     "@nstudio/nativescript-exoplayer": "^6.2.0",
-    "@vue/runtime-core": "^3.3.0",
     "axios": "^1.9.0",
     "crypto-js": "^4.2.0",
     "mitt": "^3.0.1",
     "nativescript-vue": "~3.0.0",
+    "url": "^0.11.4",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

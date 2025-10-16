@@ -2,4 +2,5 @@
 <resources>
   <string name="app_name">shunle</string>
   <string name="title_activity_kimera">shunle</string>
+  <string name="title_activity_main">Main Activity</string>
 </resources>
